@@ -92,9 +92,9 @@ class Adafruit_MCP230XX(object):
             self.direction = self._readandchangepin(MCP23017_IODIRA, pin, mode)
         if self.num_gpios <= 16:
             if (pin < 8):
-                self.direction = self._readandchangepin(MCP23017_IODIRA, pin, mode)
+                self.direction = (self.direction & 0b1111111100000000) +  self._readandchangepin(MCP23017_IODIRA, pin, mode)
             else:
-                self.direction |= self._readandchangepin(MCP23017_IODIRB, pin-8, mode) << 8
+                self.direction = (self.direction & 0b0000000011111111) + (self._readandchangepin(MCP23017_IODIRB, pin-8, mode) << 8)
 
         return self.direction
 
